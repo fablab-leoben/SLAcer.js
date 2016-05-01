@@ -56,16 +56,16 @@ my $pin_vat_temperature=$cfg->param("pin_vat_temperature");
 my $pin_vat_presence=$cfg->param("pin_vat_presence");
 
 
-#checked for used controller board type according to configuration.
 #activate logging to logfile
 if ($logging_enabled eq "TRUE") 
 {
 open my $log_fh, ">", $log_file;
 }
 
-if ($controllerboard eq "BBB")  
+#basic sanity checks to determine whether or not the configuration is complete and makes at least some sense
+if ($controllerboard eq "BBB")  #if the Board is set to be a Beagle Bone Black, we need to check if it actually is one
 {
-
+say "Beagle Bone Black selected, checking board type! - check command still missing";
 }
 else {
 say "unknows printer type $controllerboard , please review your configuration, get in touch with developers or fork the code on Github and contribute the code to use the new printer"
@@ -73,15 +73,15 @@ say "unknows printer type $controllerboard , please review your configuration, g
 die "unknown board in configuration!\n";
 }
 
-if ($display_software eq "fbi")  
+if ($display_software eq "fbi")  #ckeck for configured Software to send Pictures to the projector
 {
-open(whichfile,"which $display_software |") || die "Failed: $!\n";
+open(whichfile,"which $display_software |") || die "Failed: $!\n"; #find path to the binary
 while ( <whichfile> )
 {
 my $display_software_path=$!;
 }
 }
-else {
+else { #if the configured Display software matches none of the supported packages, die
 say "unknows display software $display_software , please review your configuration, get in touch with developers or fork the code on Github and contribute the code to use the new printer"
 ;
 die "unknown display software in configuration!\n";
