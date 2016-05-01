@@ -7,14 +7,19 @@
 #this piece of software is provided with absolutely no warranty
 #use at your own risk
 #configuration is stored in printengine.cfg, do not use hardcoded configuration in ths perl script, that is bad practice.
+#definition of libraries and modules to include
 use warnings;
 use strict;
 use Getopt::Std;
 use Getopt::Long;
 use feature qw(say);
 use Config::Simple;
-my $cfg = new Config::Simple('printengine.cfg');
-$cfg->read('printengine.cfg');
+
+
+#import configuration from configuration file
+our $cfg = new Config::Simple();
+$cfg->read("printengine.cfg");
+
 #asign config values from config file to values in script
 my $log_file = $cfg->param("log_file");
 my $logging_enabled=$cfg->param("logging_enabled");
@@ -30,7 +35,7 @@ my $wiper=$cfg->param("wiper");
 my $door_contact=$cfg->param("door_contact");
 my $X_pixels=$cfg->param("X_pixels");
 my $Y_pixels=$cfg->param("Y_pixels");
-my $Z_Autocal=$cfg->param("Z-Z_Autocal");
+my $Z_Autocal=$cfg->param("Z_Autocal");
 my $testrun_capable=$cfg->param("testrun_capable");
 my $testrun_color=$cfg->param("testrun_color");
 my $prodrun_color=$cfg->param("prodrun_color");
@@ -54,8 +59,11 @@ my $pin_step_wiper=$cfg->param("pin_step_wiper");
 my $pin_vat_heater=$cfg->param("pin_vat_heater");
 my $pin_vat_temperature=$cfg->param("pin_vat_temperature");
 my $pin_vat_presence=$cfg->param("pin_vat_presence");
-
-
+say "test\n";
+#asign additional variables
+#
+#
+#
 #activate logging to logfile
 if ($logging_enabled eq "TRUE") 
 {
@@ -68,7 +76,7 @@ if ($controllerboard eq "BBB")  #if the Board is set to be a Beagle Bone Black, 
 say "Beagle Bone Black selected, checking board type! - check command still missing";
 }
 else {
-say "unknows printer type $controllerboard , please review your configuration, get in touch with developers or fork the code on Github and contribute the code to use the new printer"
+say "unknown controller type $controllerboard , please review your configuration, get in touch with developers or fork the code on Github and contribute the code to use the new printer"
 ;
 die "unknown board in configuration!\n";
 }
