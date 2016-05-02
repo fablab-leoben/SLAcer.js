@@ -59,7 +59,7 @@ my $pin_step_wiper=$cfg->param("pin_step_wiper");
 my $pin_vat_heater=$cfg->param("pin_vat_heater");
 my $pin_vat_temperature=$cfg->param("pin_vat_temperature");
 my $pin_vat_presence=$cfg->param("pin_vat_presence");
-say "test\n";
+
 #asign additional variables
 #
 #
