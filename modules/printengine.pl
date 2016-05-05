@@ -18,6 +18,7 @@ use File::Which;
 use Sys::Mmap;
 use Graphics::Framebuffer;
 use Time::HiRes;
+use Sort::Key::Natural qw( natsort );
 #import configuration from configuration file
 our $cfg = new Config::Simple();
 $cfg->read("printengine.cfg");
@@ -215,7 +216,7 @@ die "unknown display software in configuration!\n";
 	} readdir(DIR);
     closedir(DIR);
     #sort array
-    my @pics_sorted=sort @pics
+    my @pics_sorted=natsort @pics;
     print @pics_sorted;
 #builtin framebuffer access
 
