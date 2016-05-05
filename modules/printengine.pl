@@ -221,10 +221,9 @@ $fb->clear_screen('OFF');
  $fb->blit_write(
  $fb->load_image(
          {   'center'     => $fb->{'CENTER_XY'},
-             'file'       => '$dir/$pics[0]', # Usually needs full path
+             'file'       => "$dir/$pics[0]" # Usually needs full path
          }
      )
  ); 
 $fb->clear_screen('ON');
-
  
