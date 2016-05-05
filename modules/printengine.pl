@@ -17,6 +17,7 @@ use Config::Simple;
 use File::Which;
 use Sys::Mmap;
 use Graphics::Framebuffer;
+use Time::HiRes;
 #import configuration from configuration file
 our $cfg = new Config::Simple();
 $cfg->read("printengine.cfg");
@@ -195,9 +196,7 @@ say "unknows display software $display_software , please review your configurati
 die "unknown display software in configuration!\n";
 }
 ######testcode framebuffer access
- my $fb = Graphics::Framebuffer->new(
- FB_DEVICE=>$display_device
- );
+ my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device );
  $fb->cls();
  $fb->blit_write(
      $fb->load_image(
@@ -217,5 +216,6 @@ die "unknown display software in configuration!\n";
          }
      )
  ); 
-
+sleep 3;
+$fb->cls();
  
