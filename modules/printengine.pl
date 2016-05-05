@@ -214,6 +214,9 @@ die "unknown display software in configuration!\n";
 	    && -f "$dir/$_"   # and is a file
 	} readdir(DIR);
     closedir(DIR);
+    #sort array
+    my @pics_sorted=sort @pics
+    print @pics_sorted;
 #builtin framebuffer access
 
  my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device, SPLASH=>0 );
@@ -221,7 +224,7 @@ $fb->clear_screen('OFF');
  $fb->blit_write(
  $fb->load_image(
          {   'center'     => $fb->{'CENTER_XY'},
-             'file'       => "$dir/$pics[0]" # Usually needs full path
+             'file'       => "$dir/$pics_sorted[0]" # Usually needs full path
          }
      )
  ); 
