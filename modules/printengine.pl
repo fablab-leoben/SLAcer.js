@@ -198,12 +198,24 @@ die "unknown display software in configuration!\n";
  my $fb = Graphics::Framebuffer->new(
  FB_DEVICE=>$display_device
  );
-
  $fb->cls();
- $fb->set_color({'red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 255});
- $fb->plot({'x' => 28, 'y' => 79,'pixel_size' => 1});
- $fb->drawto({'x' => 405,'y' => 681,'pixel_size' => 1});
- $fb->circle({'x' => 200, 'y' => 200, 'radius' => 100, 'filled' => 1});
- $fb->polygon({'coordinates' => [20,20,  53,3,  233,620], 'pixel_size' => 5});
- $fb->box({'x' => 95, 'y' => 100, 'xx' => 400, 'yy' => 600, 'filled' => 1});
+ $fb->blit_write(
+     $fb->load_image(
+         {
+
+             'center'     => $fb->{'CENTER_XY'},
+                                   # Three centering options are available
+                                   #  CENTER_X  = center horizontally
+                                   #  CENTER_Y  = center vertically
+                                   #  CENTER_XY = center horizontally and
+                                   #              vertically.  Placing it
+                                   #              right in the middle of
+                                   #              the screen.
+
+             'file'       => 'test1.png', # Usually needs full path
+
+         }
+     )
+ ); 
+
  
