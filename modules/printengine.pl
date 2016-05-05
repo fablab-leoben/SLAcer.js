@@ -195,7 +195,9 @@ say "unknows display software $display_software , please review your configurati
 die "unknown display software in configuration!\n";
 }
 ######testcode framebuffer access
- my $fb = Graphics::Framebuffer->new();
+ my $fb = Graphics::Framebuffer->new(
+ FB_DEVICE=>$display_device
+ );
 
  $fb->cls();
  $fb->set_color({'red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 255});
