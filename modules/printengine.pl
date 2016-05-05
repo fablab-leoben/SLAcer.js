@@ -18,7 +18,6 @@ use File::Which;
 use Sys::Mmap;
 use Graphics::Framebuffer;
 use Time::HiRes;
-#use Sort::Key::Natural qw( natsort );
 #import configuration from configuration file
 our $cfg = new Config::Simple();
 $cfg->read("printengine.cfg");
@@ -216,16 +215,9 @@ die "unknown display software in configuration!\n";
 	} readdir(DIR);
     closedir(DIR);
     #sort array
-#    my @pics_sorted=natsort @pics;
-#    print @pics_sorted;
-my @pics_sorted=sort { mask($a) <=> mask($b) } @pics;
-# where mask is a function to return digits and mask out anything else, so 
-# integer comparison will work
-sub mask {
-   s/[^0-9]//og;
-   return $_;
-}
-print @pics_sorted;
+my @pics_sorted=sort { length $a <=> length $b||$a cmp $b } @pics;
+#print @pics_sorted;
+
 #builtin framebuffer access
 
  my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device, SPLASH=>0 );
