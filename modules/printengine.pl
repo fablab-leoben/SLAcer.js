@@ -221,13 +221,15 @@ my @pics_sorted=sort { length $a <=> length $b||$a cmp $b } @pics;
 #builtin framebuffer access
 
  my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device, SPLASH=>0 );
+foreach(@pics_sorted){
 $fb->clear_screen('OFF');
  $fb->blit_write(
  $fb->load_image(
          {   'center'     => $fb->{'CENTER_XY'},
-             'file'       => "$dir/$pics_sorted[0]" # Usually needs full path
+             'file'       => "$dir/$_" # Usually needs full path
          }
      )
- ); 
+ );
+ sleep 3;
 $fb->clear_screen('ON');
- 
+} 
