@@ -204,7 +204,7 @@ say "unknows display software $display_software , please review your configurati
 die "unknown display software in configuration!\n";
 }
 ######testcode framebuffer access
- my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device: SPLASH=>0; );
+ my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device, SPLASH=>0 );
  $fb->clear_screen('OFF');
  $fb->blit_write(
      $fb->load_image(
