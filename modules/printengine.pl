@@ -16,6 +16,7 @@ use feature qw(say);
 use Config::Simple;
 use File::Which;
 use Sys::Mmap;
+use Graphics::Framebuffer;
 #import configuration from configuration file
 our $cfg = new Config::Simple();
 $cfg->read("printengine.cfg");
