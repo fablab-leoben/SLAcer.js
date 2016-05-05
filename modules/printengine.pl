@@ -187,9 +187,17 @@ if ($display_software eq "fbi")  #ckeck for configured Software to send Pictures
 my $display_software_path= which "fbi";
 unless (defined $display_software_path and length $display_software_path){
 die "configured display software not found\n";}
-unless (defined $display_software_path and length $display_software_path){
-die "configured display software not found\n";}
+unless (defined $display_device and length $display_device){
+die "display devicde not configured\n";}
+unless (defined $virtual_terminal and length $virtual_terminal){
+die "virtual terminal not configured\n";}
 }
+elsif ($display_software eq "builtin")
+{
+unless (defined $display_device and length $display_device){
+die "display device not configured\n";}
+}
+
 else { #if the configured Display software matches none of the supported packages, die
 say "unknows display software $display_software , please review your configuration, get in touch with developers or fork the code on Github and contribute the code to use the new printer"
 ;
@@ -197,7 +205,8 @@ die "unknown display software in configuration!\n";
 }
 ######testcode framebuffer access
  my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device );
- $fb->cls();
+ #$fb->cls();
+ $fb->clear_screen('OFF');
  $fb->blit_write(
      $fb->load_image(
          {
@@ -217,5 +226,6 @@ die "unknown display software in configuration!\n";
      )
  ); 
 sleep 3;
-$fb->cls();
+$fb->clear_screen('OFF');
+
  
