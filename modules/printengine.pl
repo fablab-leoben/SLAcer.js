@@ -203,28 +203,28 @@ say "unknows display software $display_software , please review your configurati
 ;
 die "unknown display software in configuration!\n";
 }
-######testcode framebuffer access
+#read filelist from testfolder
+    my $dir = '/tmp/tst';
+
+    opendir(DIR, $dir) or die $!;
+
+    my @pics 
+        = grep { 
+            m/\.png$/             # png files only
+	    && -f "$dir/$_"   # and is a file
+	} readdir(DIR);
+    closedir(DIR);
+#builtin framebuffer access
+
  my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device, SPLASH=>0 );
- $fb->clear_screen('OFF');
+ #$fb->clear_screen('OFF');
  $fb->blit_write(
-     $fb->load_image(
-         {
-
-             'center'     => $fb->{'CENTER_XY'},
-                                   # Three centering options are available
-                                   #  CENTER_X  = center horizontally
-                                   #  CENTER_Y  = center vertically
-                                   #  CENTER_XY = center horizontally and
-                                   #              vertically.  Placing it
-                                   #              right in the middle of
-                                   #              the screen.
-
-             'file'       => 'test1.png', # Usually needs full path
-
+ $fb->load_image(
+         {   'center'     => $fb->{'CENTER_XY'},
+             'file'       => '$pics[0]', # Usually needs full path
          }
      )
  ); 
-sleep 3;
-$fb->clear_screen('OFF');
+#$fb->clear_screen('ON');
 
  
