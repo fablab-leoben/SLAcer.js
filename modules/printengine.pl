@@ -217,14 +217,14 @@ die "unknown display software in configuration!\n";
 #builtin framebuffer access
 
  my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device, SPLASH=>0 );
- #$fb->clear_screen('OFF');
+$fb->clear_screen('OFF');
  $fb->blit_write(
  $fb->load_image(
          {   'center'     => $fb->{'CENTER_XY'},
-             'file'       => '$pics[0]', # Usually needs full path
+             'file'       => '$dir/$pics[0]', # Usually needs full path
          }
      )
  ); 
-#$fb->clear_screen('ON');
+$fb->clear_screen('ON');
 
  
