@@ -224,6 +224,9 @@ my @pics_sorted=sort { length $a <=> length $b||$a cmp $b } @pics;
 #builtin framebuffer access
 
  my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device, SPLASH=>0 );
+#my ($width,$height,$bits_per_pixel) = $fb->screen_dimensions();
+#say "X=$width,Y=$height,colorbits=$bits_per_pixel"; #debug use
+sleep 10;
 foreach(@pics_sorted){
 $fb->clear_screen('OFF');
  $fb->blit_write(
