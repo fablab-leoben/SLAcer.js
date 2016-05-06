@@ -3,7 +3,8 @@
 #Copyright 2016 Robert Koeppl, Fablab Leoben robert.koeppl@fablab-leoben.at
 #http://www.fablab-leoben.at
 #http://www.github.com/fablab-leoben
-#released under the MIT License
+#released under the GPL v2
+#unzip code based on https://gist.github.com/eqhmcow/5389877
 #this piece of software is provided with absolutely no warranty
 #use at your own risk
 #configuration is stored in printengine.cfg, do not use hardcoded configuration in ths perl script, that is bad practice.
@@ -18,6 +19,8 @@ use File::Which;
 use Sys::Mmap;
 use Graphics::Framebuffer;
 use Time::HiRes;
+use IO::Uncompress::AnyUncompress qw(anyuncompress $AnyUncompressError);
+use IO::File ;
 #import configuration from configuration file
 our $cfg = new Config::Simple();
 $cfg->read("printengine.cfg");
