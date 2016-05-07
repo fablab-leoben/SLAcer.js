@@ -269,9 +269,9 @@ sleep 10;
 #sleep 10;
 foreach(@pics_sorted){
 $fb->clear_screen('OFF');
- $fb->blit_write(
  Time::HiRes::usleep("$resin_settling_time_us");
- $fb->load_image(
+ $fb->blit_write(
+  $fb->load_image(
          {   
          
              'width'      => $X_pixels, # Optional. Resizes to this maximum
@@ -287,6 +287,7 @@ $fb->clear_screen('OFF');
          }
      )
  );
+
+}
  Time::HiRes::usleep("$exposure_time_us");
-} 
 $fb->clear_screen('ON');
