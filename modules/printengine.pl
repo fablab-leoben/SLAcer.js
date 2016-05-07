@@ -264,6 +264,7 @@ $fb->clear_screen('OFF');
              'height'     => $Y_pixels, # Optional. Resizes to this maximum
                                    # height.  It fits the image to this
                                    # size
+             'scale_type' => 'max',
              'center'     => $fb->{'CENTER_XY'},
              'file'       => "$dir/$_" # Usually needs full path
          }
