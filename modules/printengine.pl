@@ -250,16 +250,25 @@ my @pics_sorted=sort { length $a <=> length $b||$a cmp $b } @pics;
  my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device, SPLASH=>0 );
 #my ($width,$height,$bits_per_pixel) = $fb->screen_dimensions();
 #say "X=$width,Y=$height,colorbits=$bits_per_pixel"; #debug use
-sleep 10;
+#sleep 10;
 foreach(@pics_sorted){
 $fb->clear_screen('OFF');
  $fb->blit_write(
  $fb->load_image(
-         {   'center'     => $fb->{'CENTER_XY'},
+         {   
+         
+             'width'      => $X_pixels, # Optional. Resizes to this maximum
+                                   # width.  It fits the image to this
+                                   # size.
+
+             'height'     => $Y_pixels, # Optional. Resizes to this maximum
+                                   # height.  It fits the image to this
+                                   # size
+             'center'     => $fb->{'CENTER_XY'},
              'file'       => "$dir/$_" # Usually needs full path
          }
      )
  );
- sleep 3;
+ sleep 1;
 $fb->clear_screen('ON');
 } 
