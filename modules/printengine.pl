@@ -4,7 +4,6 @@
 #http://www.fablab-leoben.at
 #http://www.github.com/fablab-leoben
 #released under the GPL v2
-#unzip code based on https://gist.github.com/eqhmcow/5389877
 #this piece of software is provided with absolutely no warranty
 #use at your own risk
 #configuration is stored in printengine.cfg, do not use hardcoded configuration in ths perl script, that is bad practice.
@@ -19,14 +18,18 @@ use File::Which;
 use Sys::Mmap;
 use Graphics::Framebuffer;
 use Time::HiRes;
-use IO::Uncompress::AnyUncompress qw(anyuncompress $AnyUncompressError);
+use Archive::Zip;
 use IO::File ;
+use File::Spec::Functions qw(splitpath);
+use File::Path qw(mkpath);
+use File::Path 'rmtree';
 #import configuration from configuration file
 our $cfg = new Config::Simple();
 $cfg->read("printengine.cfg");
 
 #asign config values from config file to values in script
 my $log_file = $cfg->param("log_file");
+my $temporary_folder=$cfg->param("temporary_folder");
 my $logging_enabled=$cfg->param("logging_enabled");
 my $controllerboard=$cfg->param("controllerboard");
 my $steps_per_mm=$cfg->param("steps_per_mm");
@@ -70,7 +73,10 @@ my $pin_vat_temperature=$cfg->param("pin_vat_temperature");
 my $pin_vat_presence=$cfg->param("pin_vat_presence");
 
 #asign additional variables
-#
+my $picturesarchive;
+my $archivesource;
+GetOptions("picturesarchive=s"=>\$picturesarchive, "archivesource=s"=>\$archivesource);#read pictures archive from command line option
+
 #
 #
 #activate logging to logfile
@@ -84,6 +90,8 @@ open my $log_fh, ">", $log_file;
 #check if the parameters and pins needed for the features enabled are configured
 unless (defined $steps_per_mm and length $steps_per_mm){
 die "No steps per mm for Z Axis defined\n";}
+unless (defined $temporary_folder and length $temporary_folder){
+die "No temporary folder defined\n";}
 unless (defined $controllerboard and length $controllerboard){
 die "No controllerboard defined\n";}
 unless (defined $projector_type and length $projector_type){
@@ -206,11 +214,27 @@ say "unknows display software $display_software , please review your configurati
 ;
 die "unknown display software in configuration!\n";
 }
+#uncompresse archive to temporary folder
+unless (defined $temporary_folder and length $temporary_folder){
+die "No temporary folder defined\n";}
+rmtree([ "$temporary_folder"]) or die "$!: for directory $temporary_folder\n"; 
+unless (-d $temporary_folder) {
+            mkpath($temporary_folder) or die "Couldn't mkdir $temporary_folder: $!";}
+            
+
+my $zip = Archive::Zip->new($picturesarchive);
+$zip->extractTree('',$temporary_folder);
+
+
+
 #read filelist from testfolder
-    my $dir = '/tmp/tst';
-
-    opendir(DIR, $dir) or die $!;
-
+    my $dir = $temporary_folder;
+    if ($archivesource eq "slacer") {
+     $dir = "$temporary_folder/slices";}
+    else {
+     $dir = $temporary_folder;
+    }
+   opendir(DIR, $dir) or die $!;
     my @pics 
         = grep { 
             m/\.png$/             # png files only
