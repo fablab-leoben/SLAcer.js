@@ -46,6 +46,7 @@ my $Y_pixels=$cfg->param("Y_pixels");
 my $Z_speed=$cfg->param("Z_speed");
 my $Z_max_speed=$cfg->param("Z_max_speed");
 my $Z_Autocal=$cfg->param("Z_Autocal");
+my $overshoot=$cfg->param("overshoot");
 my $testrun_capable=$cfg->param("testrun_capable");
 my $testrun_color=$cfg->param("testrun_color");
 my $prodrun_color=$cfg->param("prodrun_color");
@@ -76,7 +77,10 @@ my $pin_vat_presence=$cfg->param("pin_vat_presence");
 my $picturesarchive;
 my $archivesource;
 GetOptions("picturesarchive=s"=>\$picturesarchive, "archivesource=s"=>\$archivesource);#read pictures archive from command line option
-
+my $layer_height;
+my $exposure_time;
+my $resin_settling_time;
+my $cfg2;
 #
 #
 #activate logging to logfile
@@ -90,6 +94,8 @@ open my $log_fh, ">", $log_file;
 #check if the parameters and pins needed for the features enabled are configured
 unless (defined $steps_per_mm and length $steps_per_mm){
 die "No steps per mm for Z Axis defined\n";}
+unless (defined $overshoot and length $overshoot){
+die "No overshoot for Z Axis defined\n";}
 unless (defined $temporary_folder and length $temporary_folder){
 die "No temporary folder defined\n";}
 unless (defined $controllerboard and length $controllerboard){
@@ -230,7 +236,12 @@ $zip->extractTree('',$temporary_folder);
 #read filelist from testfolder
     my $dir = $temporary_folder;
     if ($archivesource eq "slacer") {
-     $dir = "$temporary_folder/slices";}
+     $dir = "$temporary_folder/slices";
+         $cfg2 = new Config::Simple();
+         $cfg2->read("$temporary_folder/README.txt");
+         $layer_height=$cfg2->param("layer_height");
+         $exposure_time=$cfg2->param("exposure_time");
+         $resin_settling_time=$cfg2->param("resin_settling_time");}
     else {
      $dir = $temporary_folder;
     }
@@ -243,6 +254,11 @@ $zip->extractTree('',$temporary_folder);
     closedir(DIR);
     #sort array
 my @pics_sorted=sort { length $a <=> length $b||$a cmp $b } @pics;
+say "layer_height=$layer_height µm, exposure_time=$exposure_time ms,resin_settling_time=$resin_settling_time ms\n";
+my $exposure_time_us=1000*$exposure_time;#conversion to microseconds
+my $resin_settling_time_us=1000*$resin_settling_time;#conversion to microseconds
+sleep 10;
+
 #print @pics_sorted;
 
 #builtin framebuffer access
@@ -254,6 +270,7 @@ my @pics_sorted=sort { length $a <=> length $b||$a cmp $b } @pics;
 foreach(@pics_sorted){
 $fb->clear_screen('OFF');
  $fb->blit_write(
+ Time::HiRes::usleep("$resin_settling_time_us");
  $fb->load_image(
          {   
          
@@ -270,6 +287,6 @@ $fb->clear_screen('OFF');
          }
      )
  );
- sleep 1;
-$fb->clear_screen('ON');
+ Time::HiRes::usleep("$exposure_time_us");
 } 
+$fb->clear_screen('ON');
