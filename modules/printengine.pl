@@ -257,6 +257,7 @@ my @pics_sorted=sort { length $a <=> length $b||$a cmp $b } @pics;
 say "layer_height=$layer_height µm, exposure_time=$exposure_time ms,resin_settling_time=$resin_settling_time ms\n";
 my $exposure_time_us=1000*$exposure_time;#conversion to microseconds
 my $resin_settling_time_us=1000*$resin_settling_time;#conversion to microseconds
+say "layer_height=$layer_height µm, exposure_time=$exposure_time_us µs,resin_settling_time=$resin_settling_time_us µs\n";
 sleep 10;
 
 #builtin framebuffer access
