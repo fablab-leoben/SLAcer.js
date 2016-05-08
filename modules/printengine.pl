@@ -259,14 +259,9 @@ my $exposure_time_us=1000*$exposure_time;#conversion to microseconds
 my $resin_settling_time_us=1000*$resin_settling_time;#conversion to microseconds
 sleep 10;
 
-#print @pics_sorted;
-
 #builtin framebuffer access
 
- my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device, SPLASH=>0 );
-#my ($width,$height,$bits_per_pixel) = $fb->screen_dimensions();
-#say "X=$width,Y=$height,colorbits=$bits_per_pixel"; #debug use
-#sleep 10;
+my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device, SPLASH=>0 );
 foreach(@pics_sorted){
 $fb->clear_screen('OFF');
  Time::HiRes::usleep("$resin_settling_time_us");
@@ -287,7 +282,8 @@ $fb->clear_screen('OFF');
          }
      )
  );
-
+Time::HiRes::usleep("$exposure_time_us");
+$fb->clear_screen('OFF');
 }
- Time::HiRes::usleep("$exposure_time_us");
+
 $fb->clear_screen('ON');
