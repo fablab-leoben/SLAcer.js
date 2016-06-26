@@ -322,7 +322,7 @@ sub send_commands{
     my $port = Device::SerialPort->new($arduinotty);
  
     # 19200, 81N on the USB ftdi driver
-    $port->baudrate(arduinottybaudrate);
+    $port->baudrate($arduinottybaudrate);
     $port->databits(8);
     $port->parity("none");
     $port->stopbits(1);
