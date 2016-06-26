@@ -298,7 +298,7 @@ foreach(@pics_sorted){
  );
 Time::HiRes::usleep("$exposure_time_us");
 $z=$z+$zdelta;
-my @command_list=('G1 Z $z');
+my @command_list=("G1 Z $z F1");
 send_commands(@command_list);
 $fb->clear_screen('OFF');
 Time::HiRes::usleep("$resin_settling_time_us");
