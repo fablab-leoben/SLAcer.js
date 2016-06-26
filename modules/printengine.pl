@@ -234,7 +234,13 @@ die "No temporary folder defined\n";}
 rmtree([ "$temporary_folder"]) or die "$!: for directory $temporary_folder\n"; 
 unless (-d $temporary_folder) {
             mkpath($temporary_folder) or die "Couldn't mkdir $temporary_folder: $!";}
-            
+my $port = Device::SerialPort->new($arduinotty);
+ 
+    # 19200, 81N on the USB ftdi driver
+    $port->baudrate($arduinottybaudrate);
+    $port->databits(8);
+    $port->parity("none");
+    $port->stopbits(1);            
 
 my $zip = Archive::Zip->new($picturesarchive);
 $zip->extractTree('',$temporary_folder);
@@ -325,13 +331,7 @@ sub send_commands{
     my @command_list = @_;
  
     #Open port
-    my $port = Device::SerialPort->new($arduinotty);
- 
-    # 19200, 81N on the USB ftdi driver
-    $port->baudrate($arduinottybaudrate);
-    $port->databits(8);
-    $port->parity("none");
-    $port->stopbits(1);
+
  
     while (1) {
         # Poll to see if any data is coming in
