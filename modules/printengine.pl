@@ -307,7 +307,8 @@ $fb->clear_screen('OFF');
 $z=$z+$zdelta;
 my @command_list=("G1 Z $z F1");
 send_commands(@command_list);
-
+my $zsleep=$zdelta*$Z_speed*1000000 #microseconds
+Time::HiRes::usleep("$zsleep");
 Time::HiRes::usleep("$resin_settling_time_us");
 }
 $fb->clear_screen('ON');
