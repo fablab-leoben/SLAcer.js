@@ -270,7 +270,9 @@ sleep 10;
 # Home Z-Axis
 my @command_list=('G21','G28 Z');
 send_commands(@command_list);
-sleep 20;
+sleep 10;
+my $z=0;
+my $zdelta=$layer_height/1000;
 #
 #builtin framebuffer access
 
@@ -295,6 +297,9 @@ foreach(@pics_sorted){
      )
  );
 Time::HiRes::usleep("$exposure_time_us");
+$z=$z+$zdelta;
+my @command_list=('G1 Z $z');
+send_commands(@command_list);
 $fb->clear_screen('OFF');
 Time::HiRes::usleep("$resin_settling_time_us");
 }
