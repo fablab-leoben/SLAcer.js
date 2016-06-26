@@ -184,9 +184,11 @@ say "Beagle Bone Black selected, checking board type! - check command still miss
 unless (defined $pin_trigger_post and length $pin_trigger_post and defined $pin_trigger_pre and length $pin_trigger_pre){
 die "trigger pin definition incomplete\n";}
 }
-elsif ($controllerboard eq "raspiarduinoramps")
+elsif ($controllerboard eq "raspiarduinoramps"){
+say "Raspberry PI with Arduino selected, checking board type! - check command still missing";
 unless (defined $arduinotty and length $arduinotty and defined $arduinottybaudrate and length $arduinottybaudrate){
-die "trigger pin definition incomplete\n";
+die "trigger pin definition incomplete\n";}
+}
 else {
 say "unknown controller type $controllerboard , please review your configuration, get in touch with developers or fork the code on Github and contribute the code to use the new printer"
 ;
