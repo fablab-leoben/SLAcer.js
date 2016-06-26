@@ -305,7 +305,7 @@ foreach(@pics_sorted){
 Time::HiRes::usleep("$exposure_time_us");
 $fb->clear_screen('OFF');
 $z=$z+$zdelta;
-my @command_list=("G1 Z $z F1");
+my @command_list=("G1 Z $z F $Z_speed");
 send_commands(@command_list);
 my $zsleep=$zdelta*$Z_speed*60*1000000; #microseconds, conversion from mm/min to mm/s
 Time::HiRes::usleep("$zsleep");
