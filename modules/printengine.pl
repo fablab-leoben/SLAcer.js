@@ -23,6 +23,8 @@ use IO::File ;
 use File::Spec::Functions qw(splitpath);
 use File::Path qw(mkpath);
 use File::Path 'rmtree';
+use Device::SerialPort;
+use Slurp;
 #import configuration from configuration file
 our $cfg = new Config::Simple();
 $cfg->read("printengine.cfg");
@@ -265,7 +267,11 @@ my $exposure_time_us=1000*$exposure_time;#conversion to microseconds
 my $resin_settling_time_us=1000*$resin_settling_time;#conversion to microseconds
 say "layer_height=$layer_height µm, exposure_time=$exposure_time_us µs,resin_settling_time=$resin_settling_time_us µs\n";
 sleep 10;
-
+# Home Z-Axis
+my@command_list=('G21','G28 Z')
+send_commands(@command_list);
+sleep 20;
+#
 #builtin framebuffer access
 
 my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device, SPLASH=>0 );
@@ -309,35 +315,35 @@ $fb->clear_screen('ON');
  
 #send_commands(@command_list);
  
-#sub send_commands{
-#    my @command_list = @_;
+sub send_commands{
+    my @command_list = @_;
  
     #Open port
-#    my $port = Device::SerialPort->new("/dev/ttyUSB0");
+    my $port = Device::SerialPort->new($arduinotty);
  
     # 19200, 81N on the USB ftdi driver
-#    $port->baudrate(38400);
-#    $port->databits(8);
-#    $port->parity("none");
-#    $port->stopbits(1);
+    $port->baudrate(arduinottybaudrate);
+    $port->databits(8);
+    $port->parity("none");
+    $port->stopbits(1);
  
-#    while (1) {
+    while (1) {
         # Poll to see if any data is coming in
-#        if ( my $char = $port->lookfor() ) {
-#            $char =~ s/\r//;
-#            print "$char\n";
-#            if( $char =~ m/^(ok|start)$/){
-#                #Send next command
-#                my $next_command = shift @command_list;
-#                print "$next_command\n";
-#                $port->write("$next_command\n");
-#            }else{
-#                print "unknown: $char\n";
-#            }
-#        }
- #       sleep 0.01;
- #       unless(@command_list){last; }
- #   }
-#}
+        if ( my $char = $port->lookfor() ) {
+            $char =~ s/\r//;
+            print "$char\n";
+            if( $char =~ m/^(ok|start)$/){
+                #Send next command
+                my $next_command = shift @command_list;
+                print "$next_command\n";
+                $port->write("$next_command\n");
+            }else{
+                print "unknown: $char\n";
+            }
+        }
+       sleep 0.01;
+       unless(@command_list){last; }
+   }
+}
 ###end sendcode
 exit 0;
