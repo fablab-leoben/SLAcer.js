@@ -268,7 +268,7 @@ my $resin_settling_time_us=1000*$resin_settling_time;#conversion to microseconds
 say "layer_height=$layer_height µm, exposure_time=$exposure_time_us µs,resin_settling_time=$resin_settling_time_us µs\n";
 sleep 10;
 # Home Z-Axis
-my @command_list=('G21','G28 Z')
+my @command_list=('G21','G28 Z');
 send_commands(@command_list);
 sleep 20;
 #
