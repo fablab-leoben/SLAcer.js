@@ -287,7 +287,7 @@ foreach(@pics_sorted){
      )
  );
 Time::HiRes::usleep("$exposure_time_us");
-$fb->clear_screen('OFF')
+$fb->clear_screen('OFF');
 Time::HiRes::usleep("$resin_settling_time_us");
 }
 $fb->clear_screen('ON');
