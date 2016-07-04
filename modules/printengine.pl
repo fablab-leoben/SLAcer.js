@@ -276,7 +276,7 @@ sleep 10;
 # Home Z-Axis
 my @command_list=('G21','G28 Z');
 send_commands(@command_list);
-sleep 10;
+sleep 30;
 my $z=0;
 my $zdelta=$layer_height/1000;
 #
@@ -305,28 +305,16 @@ foreach(@pics_sorted){
 Time::HiRes::usleep("$exposure_time_us");
 $fb->clear_screen('OFF');
 $z=$z+$zdelta;
-my @command_list=("G1 Z $z F $Z_speed");
+my $ztemp=$z+$overshoot;
+my @command_list=("G1 Z $ztemp F $zspeed","G1 Z $z F $Z_speed");
 send_commands(@command_list);
-my $zsleep=$zdelta*$Z_speed*60*1000000; #microseconds, conversion from mm/min to mm/s
+my $zsleep=$zdelta*$Z_speed*60*1000000+$overshoot*$Z_speed*60*1000000; #microseconds, conversion from mm/min to mm/s
 Time::HiRes::usleep("$zsleep");
 Time::HiRes::usleep("$resin_settling_time_us");
 }
 $fb->clear_screen('ON');
-##sendcode- to be adapted/rewritten taken from http://www.contraptor.org/about
-#use Device::SerialPort;
-#use Time::HiRes qw/sleep/;
-#use Slurp;
- 
-#Slup each file into a command list
-#my @command_list;
-#for my $file ( @ARGV ){
-#    push @command_list, split('\n',slurp $file);
-#}
- 
-#If your board autoresets when talked to ( like a Sanguino ), you can uncomment the line bellow to get the machine to home position before sending the actual gcode
-#send_commands('G21','G91','G1 X-150 Y-150','G1 X-150 Y-150','G1 X-150 Y-150','G1 X-150 Y-150');
- 
-#send_commands(@command_list);
+##sendcode- adapted and partially rewritten, inspiration taken from http://www.contraptor.org/about
+
  
 sub send_commands{
     my @command_list = @_;
