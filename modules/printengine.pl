@@ -308,7 +308,7 @@ $z=$z+$zdelta;
 my $ztemp=$z+$overshoot;
 my @command_list=("G1 Z $ztemp F $Z_speed","G1 Z $z F $Z_speed");
 send_commands(@command_list);
-my $zsleep=60*$zdelta/$Z_speed*1000000+60*$overshoot/$Z_speed*1000000; #microseconds, conversion from mm/min to mm/s
+my $zsleep=60*(*$zdelta+2*$overshoot)/$Z_speed*1000000; #microseconds, conversion from mm/min to mm/s
 Time::HiRes::usleep("$zsleep");
 Time::HiRes::usleep("$resin_settling_time_us");
 }
