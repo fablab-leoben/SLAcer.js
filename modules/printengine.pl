@@ -306,7 +306,7 @@ Time::HiRes::usleep("$exposure_time_us");
 $fb->clear_screen('OFF');
 $z=$z+$zdelta;
 my $ztemp=$z+$overshoot;
-my @command_list=("G1 Z $ztemp F $zspeed","G1 Z $z F $Z_speed");
+my @command_list=("G1 Z $ztemp F $Z_speed","G1 Z $z F $Z_speed");
 send_commands(@command_list);
 my $zsleep=$zdelta*$Z_speed*60*1000000+$overshoot*$Z_speed*60*1000000; #microseconds, conversion from mm/min to mm/s
 Time::HiRes::usleep("$zsleep");
