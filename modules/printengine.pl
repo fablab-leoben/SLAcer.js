@@ -303,7 +303,7 @@ foreach(@pics_sorted){
      )
  );
 Time::HiRes::usleep("$exposure_time_us");
-$fb->clear_screen('OFF');
+#$fb->clear_screen('OFF');
 $z=$z+$zdelta;
 my $ztemp=$z+$overshoot;
 my @command_list=("G1 Z $ztemp F $Z_speed","G1 Z $z F $Z_speed");
