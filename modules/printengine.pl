@@ -224,7 +224,7 @@ die "display device not configured\n";}
 }
 
 else { #if the configured Display software matches none of the supported packages, die
-say "unknows display software $display_software , please review your configuration, get in touch with developers or fork the code on Github and contribute the code to use the new printer"
+say "unknown display software $display_software , please review your configuration, get in touch with developers or fork the code on Github and contribute the code to use the new printer"
 ;
 die "unknown display software in configuration!\n";
 }
@@ -277,6 +277,7 @@ sleep 10;
 my @command_list=('G21','G28 Z');
 send_commands(@command_list);
 sleep 30;
+
 my $z=0;
 my $zdelta=$layer_height/1000;
 #
@@ -285,6 +286,9 @@ my $zdelta=$layer_height/1000;
 my $fb = Graphics::Framebuffer->new( FB_DEVICE=>$display_device, SPLASH=>0 );
 $fb->clear_screen('OFF');
 foreach(@pics_sorted){
+#turn on LED  -LED is mapped to the Fan, Fan Pin in Firmware has been set to a PWM pin.
+my @command_list=('M106 S255');
+send_commands(@command_list);
  $fb->blit_write(
   $fb->load_image(
          {   
@@ -303,6 +307,8 @@ foreach(@pics_sorted){
      )
  );
 Time::HiRes::usleep("$exposure_time_us");
+my @command_list=('M107');
+send_commands(@command_list);
 $fb->clear_screen('OFF');
 $z=$z+$zdelta;
 my $ztemp=$z+$overshoot;
@@ -312,6 +318,7 @@ my $zsleep=60*($zdelta+2*$overshoot)/$Z_speed*1000000; #microseconds, conversion
 Time::HiRes::usleep("$zsleep");
 Time::HiRes::usleep("$resin_settling_time_us");
 }
+
 $fb->clear_screen('ON');
 ##sendcode- adapted and partially rewritten, inspiration taken from http://www.contraptor.org/about
 
