@@ -318,6 +318,9 @@ my $zsleep=60*($zdelta+2*$overshoot)/$Z_speed*1000000; #microseconds, conversion
 Time::HiRes::usleep("$zsleep");
 Time::HiRes::usleep("$resin_settling_time_us");
 }
+#home Z axis to retrieve printed parts
+my @command_list=('G28 Z');
+send_commands(@command_list);
 
 $fb->clear_screen('ON');
 ##sendcode- adapted and partially rewritten, inspiration taken from http://www.contraptor.org/about
